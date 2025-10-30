@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const uri =
   "mongodb+srv://simpleDBuser:yvY4DuAZCTTyOp7g@basic-project.hymtgk.mongodb.net/?appName=basic-project";
+// const uri = "mongodb://localhost:27017";
 
 //middleware
 app.use(cors());
@@ -44,12 +45,19 @@ async function run() {
       res.send(result)
       
     })
+    app.get('/users/:id',async (req,res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.findOne(query)
+      res.send(result)
+      
+    })
     
 
       app.post('/users',async (req, res) => {
           const newUser = req.body;
           const result = await userCollection.insertOne(newUser);
-          res.send(result)
+          res.send({ insertedId : result.insertedId});
           
       })
 
